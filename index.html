@@ -49,13 +49,6 @@
             cell.appendChild(document.createTextNode("Name"));
             col.appendChild(cell);
 
-            for (var i = 0; i < numSpaceBetween; i++) {
-                var cell = document.createElement('div');
-                cell.className = 'cell-spacer';
-                cell.appendChild(document.createTextNode(""));
-                col.appendChild(cell);
-            }
-
             return numId;
         }
 
@@ -136,6 +129,14 @@
             //double bracket
             var temp = Math.floor(numPlayers/2);
             for (var i = 0; i < temp; i++) {
+                if(i != 0){
+                  for (var j = 0; j < numSpaceBetween; j++) {
+                      var cell = document.createElement('div');
+                      cell.className = 'cell-spacer';
+                      cell.appendChild(document.createTextNode(""));
+                      col.appendChild(cell);
+                  }
+                }
                 numId = addTwo(col, numSpaceBetween, numId, numCol);
             }
 
@@ -156,7 +157,7 @@
             var numId = 1;
             var numCol = 1;
             var wrap = document.getElementById('bracket-wrap');
-            wrap.innerHTML = '<div id="header"><h1>Tournament Bracket Maker</h1><input id="info-box"></input><div class="button" onclick="createBracketSingle(128, 1, 1, 1)">Create Bracket</div></div><div id="spacer"></div>';
+            wrap.innerHTML = '<div id="header"><h1>Tournament Bracket Maker</h1><input id="info-box"></input><div class="button" onclick="createBracketSingle(128, 1, 1, 1)">Create Bracket</div></div>';
             document.getElementById('info-box').style.display = 'none';
             wrap.style.display = 'block';
             var col = document.createElement('div');
@@ -205,7 +206,6 @@
             <input id='info-box'></input>
             <div class="button" onclick="createBracketSingle(128)">Create Bracket</div>
         </div>
-        <div id="spacer"></div>
     </div>
 </body>
 </html>
