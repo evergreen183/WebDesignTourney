@@ -6,7 +6,8 @@
     <meta name="author" content="Cody Wilhelm, Hayden Svancara, Ryan Huse">
     <meta name="description" content="Tournament Maker">
     <link rel="stylesheet" type="text/css" href="theme.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:400,400i,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,500" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:700" rel="stylesheet">
     <script>
         // toggle between hiding and showing the dropdown content
         function dropDownCol() {
@@ -157,8 +158,9 @@
             var numId = 1;
             var numCol = 1;
             var wrap = document.getElementById('bracket-wrap');
-            wrap.innerHTML = '<div id="header"><h1>Tournament Bracket Maker</h1><input id="info-box"></input><div class="button" onclick="createBracketSingle(128, 1, 1, 1)">Create Bracket</div></div>';
             document.getElementById('info-box').style.display = 'none';
+            document.getElementById('create-button').style.display = 'none';
+            document.getElementById('new-button').style.display = 'block';
             wrap.style.display = 'block';
             var col = document.createElement('div');
             col.className = "col";
@@ -182,6 +184,14 @@
                 }
                 //Pre-even-bracket creation
                 for(var i = 0; i < loop; i++){
+                    if(i != 0){
+                      for (var j = 0; j < numSpaceBetween; j++) {
+                          var cell = document.createElement('div');
+                          cell.className = 'cell-spacer';
+                          cell.appendChild(document.createTextNode(""));
+                          col.appendChild(cell);
+                      }
+                    }
                     numId = addTwo(col, numSpaceBetween, numId, numCol);
                 }
                 //wrap-up for pre-even-bracket
@@ -203,8 +213,9 @@
     <div id='bracket-wrap'>
         <div id='header'>
             <h1>Tournament Bracket Maker</h1>
-            <input id='info-box'></input>
-            <div class="button" onclick="createBracketSingle(128)">Create Bracket</div>
+            <textarea id='info-box'></textarea>
+            <div id="create-button" onclick="createBracketSingle(32)">Create Bracket</div>
+            <div id="new-button" onclick="">New Bracket</div>
         </div>
     </div>
 </body>

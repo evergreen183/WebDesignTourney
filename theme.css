@@ -3,24 +3,45 @@
     margin: 0px;
     padding: 0px;
     font-family: 'Roboto', sans-serif;
+    font-weight: 300;
     font-size: 14px;
 }
 
 h1{
     font-size: 50px;
+    font-family: 'Roboto Slab', serif;
+    font-weight: 700;
+    letter-spacing: 3px;
 }
 
-.button{
+[id*="button"]{
     background-color: #dddddd;
     cursor: pointer;
     width: 100%;
     padding: 10px;
     text-align: center;
     display: inline-block;
+    font-weight: 500;
+}
+
+#create-button{
+
+}
+
+#new-button{
+    display: none;
 }
 
 #info-box{
     display: block;
+    max-width: 600px;
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 10px;
+    margin-bottom: 50px;
+    resize: vertical;
+    height: 60vh;
+    outline: none;
 }
 
 #header{
@@ -28,6 +49,7 @@ h1{
     position: fixed;
     width: 100%;
     top: 0;
+    left: 0;
     z-index: 50;
 }
 
@@ -38,7 +60,7 @@ h1{
     height: 100vh;
     position: relative;
     z-index: 100;
-    padding: 110px 0 50px 0;
+    padding: 110px 30px 50px 30px;
 }
 
 tr{
@@ -52,7 +74,7 @@ td{
 }
 
 .col{
-    width: 200px;
+    width: 250px;
     display: inline-block;
     vertical-align: text-top;
     position: relative;
@@ -61,8 +83,9 @@ td{
 
 [class*="cell"]{
     width: 100%;
-    height: 20px;
-    padding-left: 5px;
+    height: 25px;
+    padding-left: 10px;
+    line-height: 30px;
 }
 
 .cell-info-top{
