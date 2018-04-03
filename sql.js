@@ -1,76 +1,50 @@
 const sqlite3 = require('sqlite3').verbose();
 
-//Open db connection
-function openDB(){
-  let db = new sqlite3.Database('./tourney.db', sqlite3.OPEN_READWRITE, (err) => {
-    if (err) {
-      console.error(err.message);
-    }
-    console.log('Connected to the tourney database.');
-  });
-}
+let db = new sqlite3.Database('./tourney.db', sqlite3.OPEN_READWRITE, (err) => {
+  if (err) {
+    console.error(err.message);
+  }
+  console.log('Connected to the tourney database.');
+});
 
-//Close db connection
-function closeDB(){
-  db.close((err) => {
-    if (err) {
-      return console.error(err.message);
-    }
-  });
-}
+addTournament("ranald");
+addTournament("dammit");
+addPlayer(1, "rob");
+addPlayer(1, "dob");
+addPlayer(1, "gob");
+addPlayer(1, "rob");
 
-function addPlayer(pID, pname){
-  openDB();
-  let sql = `INSERT INTO Players(playerID, name) VALUES(` + pID + ', ?)';
-  db.run(sql, pname, function(err) {
+db.close((err) => {
+  if (err) {
+    return console.error(err.message);
+  }
+});
+
+function addTournament(tournamentName){
+  let sql = `INSERT INTO Tournament(name) VALUES(?)`;
+  db.run(sql, tournamentName, function(err) {
     if (err) {
       return console.log(err.message);
     }
     console.log(`A row has been inserted with rowid ${this.lastID}`);
   });
-  closeDB();
 };
 
-function addTournament(tID, tname){
-  openDB();
-  let sql = `INSERT INTO Tournament(tournID, name) VALUES(` + tID + ', ?)';
-  db.run(sql, tname, function(err) {
+function addPlayer(tID, playerName, playerPosition){
+  let sql = `INSERT INTO Players(name, wins, loses, position) VALUES(` + playerName + `,0,0,` + playerPosition`)`;
+  db.run(sql, playerName, function(err) {
     if (err) {
       return console.log(err.message);
     }
     console.log(`A row has been inserted with rowid ${this.lastID}`);
-  });
-  closeDB();
-}
+    var pID = this.lastID;
 
-function addMatch(tID, mID, pOneID, pTwoID){
-  openDB();
-  let sql = `INSERT INTO Matches(matchID, playerOne, playerTwo) VALUES(?,?,?)`;
-  db.run(sql, [mID, pOneID, pTwoID], function(err) {
-    if (err) {
-      return console.log(err.message);
-    }
-    console.log(`A row has been inserted with rowid ${this.lastID}`);
+    sql = `INSERT INTO TournamentPlayers(tid, pid) VALUES(` + tID + `, ?)`;
+    db.run(sql, pID, function(err) {
+      if (err) {
+        return console.log(err.message);
+      }
+      console.log(`A row has been inserted with rowid ${this.lastID}`);
+    });
   });
-
-  sql = `INSERT INTO TournamentMatches(tournID, matchID) VALUES(?,?)`;
-  db.run(sql, [tID, mID], function(err) {
-    if (err) {
-      return console.log(err.message);
-    }
-    console.log(`A row has been inserted with rowid ${this.lastID}`);
-  });
-  closeDB();
-}
-
-function addWinner(mID, pID){
-  openDB();
-  let sql = `INSERT INTO MatchWinner(matchID, winner) VALUES(?,?)`;
-  db.run(sql, [mID, pID], function(err) {
-    if (err) {
-      return console.log(err.message);
-    }
-    console.log(`A row has been inserted with rowid ${this.lastID}`);
-  });
-  closeDB();
 }
