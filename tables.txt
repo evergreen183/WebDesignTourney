@@ -1,37 +1,23 @@
 DROP TABLE IF EXISTS Tournament;
 DROP TABLE IF EXISTS Players;
-DROP TABLE IF EXISTS Matches;
-DROP TABLE IF EXISTS TournamentMatches;
-DROP TABLE IF EXISTS MatchWinner;
+DROP TABLE IF EXISTS TournamentPlayers;
 
 CREATE TABLE Tournament(
- tournID int PRIMARY KEY,
+ tournID INTEGER PRIMARY KEY AUTOINCREMENT,
  name varchar(255) NOT NULL
 );
 
 CREATE TABLE Players(
- playerID int PRIMARY KEY,
- name varchar(255) NOT NULL
+ playerID INTEGER PRIMARY KEY AUTOINCREMENT,
+ name VARCHAR(255) NOT NULL,
+ wins INTEGER,
+ losses INTEGER,
+ position VARCHAR(255)
 );
 
-CREATE TABLE Matches(
- matchID int PRIMARY KEY,
- playerOne int,
- playerTwo int,
- FOREIGN KEY (playerOne) REFERENCES Players (playerID),
- FOREIGN KEY (playerTwo) REFERENCES Players (playerID)
-);
-
-CREATE TABLE TournamentMatches(
-  tournID int,
-  matchID int,
-  FOREIGN KEY (tournID) REFERENCES Tournament (tournID),
-  FOREIGN KEY (matchID) REFERENCES Matches (matchID)
-);
-
-CREATE TABLE MatchWinner(
-  matchID int,
-  winner int,
-  FOREIGN KEY (matchID) REFERENCES Matches (matchID),
-  FOREIGN KEY (winner) REFERENCES Players (playerID)
+CREATE TABLE TournamentPlayers(
+ tid INTEGER,
+ pid INTEGER,
+ FOREIGN KEY(tid) REFERENCES Tournament(tournID),
+ FOREIGN KEY(pid) REFERENCES Players(playerID)
 );
