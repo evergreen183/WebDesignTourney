@@ -96,7 +96,7 @@
             var numSpaceTop = top;
             var numSpaceBetween = between;
             var numId = 1;
-            var body = document.getElementsByTagName('body')[0];
+            var wrap = document.getElementById('bracket-wrap');
             var col = document.createElement('div');
             col.className = "col";
 
@@ -140,7 +140,7 @@
             }
 
             //wrap-up
-            body.appendChild(col);
+            wrap.appendChild(col);
             if(numPlayers+skipTop > 1){
                 numPlayers = Math.ceil((numPlayers+skipTop)/2);
                 numSpaceTop = numSpaceTop * 2;
@@ -149,23 +149,27 @@
             }
         }
 
-        function createBracketSingle(players, top, between, skipTop) {
+        function createBracketSingle(players) {
             var numPlayers = players;
-            var numSpaceTop = top;
-            var numSpaceBetween = between;
+            var numSpaceTop = 1;
+            var numSpaceBetween = 1;
             var numId = 1;
             var numCol = 1;
-            var body = document.getElementsByTagName('body')[0];
+            var wrap = document.getElementById('bracket-wrap');
+            wrap.innerHTML = '<div id="header"><h1>Tournament Bracket Maker</h1><input id="info-box"></input><div class="button" onclick="createBracketSingle(128, 1, 1, 1)">Create Bracket</div></div><div id="spacer"></div>';
+            document.getElementById('info-box').style.display = 'none';
+            wrap.style.display = 'block';
             var col = document.createElement('div');
             col.className = "col";
 
-            //calc pre-even-bracket
+            //calc pre-even-bracket size
             var temp = 2;
             while(temp <= numPlayers){
                 temp = temp * 2;
             }
             temp = temp/2;
 
+            //check if pre-even-bracket is neeed and make it or continue to even bracket
             if (temp != numPlayers){
                 var loop = numPlayers - temp;
                 //spacer top
@@ -183,7 +187,7 @@
                 numPlayers = numPlayers-(loop+loop);
                 numSpaceTop = numSpaceTop * 2;
                 numSpaceBetween = numSpaceBetween * 2 + 1;
-                body.appendChild(col);
+                wrap.appendChild(col);
                 createEvenBracketSingle(numPlayers, numSpaceTop, numSpaceBetween, loop, numCol+1);
             }
             else{
@@ -195,6 +199,13 @@
     </script>
 </head>
 <body>
-    <div class="button" onclick="createBracketSingle(10, 1, 1, 1)">test</div>
+    <div id='bracket-wrap'>
+        <div id='header'>
+            <h1>Tournament Bracket Maker</h1>
+            <input id='info-box'></input>
+            <div class="button" onclick="createBracketSingle(128)">Create Bracket</div>
+        </div>
+        <div id="spacer"></div>
+    </div>
 </body>
 </html>
