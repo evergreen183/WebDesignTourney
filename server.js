@@ -14,26 +14,51 @@ const PORT = 3000;
 function handleRequest(req, res) {
   // Check for form submittal
   if(req.method === "POST") {
-    var body = '';
+    
+      var body = '';
 
-  req.on('data', function(data) {
-    body += data
-  });
+      req.on('data', function(data) {
+        body += data
+      });
 
-  req.on('end', function() {
-    var data = qs.parse(body);
-    req.body = data;
-    console.log(req.body);
-  });
+      req.on('end', function() {
+        var data = qs.parse(body);
+        req.body = data;
+        console.log(req.body);
+      });
    
     //tournController.create(req, res);
   } else {
-        var querystring = require('querystring');
-        var query = querystring.parse(req.url.split('?')[1]);
+        var query = req.url.split('/')[1];
+        
         req.query =  query;
       
         
+        if(req.query == "" || req.query == "create"){
+            console.log("create bracket");
+            //If no tournament id is entered serve start page
+            fs.readFile("./index.html", function (error, pgResp) {
+                if (error) {
+                    res.writeHead(404);
+                    res.write('Contents you are looking are Not Found');
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'text/html' });
+                    res.write(pgResp);
+                }
+
+                res.end();
+            });
+            
+            
+        }else{
+            
+            //find tournament info based on req.query which is tournament id
+            console.log("Find tournament: " + query);
+            res.end(query);
+        }
       
+      
+      /*
         url ="http://www.localhost:3000" + req.query.title;
         body = "Goodbye cruel localhost";
         res.writeHead(301, {
@@ -42,6 +67,7 @@ function handleRequest(req, res) {
              'Content-Type': 'text/plain' });
 
         res.end(body);
+        */
     //tournController.list(req, res);
   }
 }
@@ -53,3 +79,4 @@ var server = http.createServer(handleRequest);
 server.listen(PORT, function() {
   console.log("Listening at port ", PORT);
 });
+
