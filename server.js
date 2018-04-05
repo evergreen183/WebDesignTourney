@@ -1,6 +1,7 @@
 const http = require('http');
 const fs = require('fs');
 const qs = require('querystring');
+var index = fs.readFileSync('index.html');
 //const tournController = require('./controller/tournament');
 
 const PORT = 3000;
@@ -12,9 +13,12 @@ const PORT = 3000;
   * @param {htt.ServerResponse} res - the server response object
   */
 function handleRequest(req, res) {
+    res.statusCode = 200;
   // Check for form submittal
   if(req.method === "POST") {
     
+      // Happens when called from website to make tournament
+      
       var body = '';
 
       req.on('data', function(data) {
@@ -26,40 +30,14 @@ function handleRequest(req, res) {
         req.body = data;
         console.log(req.body);
       });
-   
-    //tournController.create(req, res);
-  } else {
-        var query = req.url.split('/')[1];
-        
-        req.query =  query;
       
-        
-        if(req.query == "" || req.query == "create"){
-            console.log("create bracket");
-            //If no tournament id is entered serve start page
-            fs.readFile("./index.html", function (error, pgResp) {
-                if (error) {
-                    res.writeHead(404);
-                    res.write('Contents you are looking are Not Found');
-                } else {
-                    res.writeHead(200, { 'Content-Type': 'text/html' });
-                    res.write(pgResp);
-                }
-
-                res.end();
-            });
-            
-            
-        }else{
-            
-            //find tournament info based on req.query which is tournament id
-            console.log("Find tournament: " + query);
-            res.end(query);
-        }
+      //TODO: Save incoming data(req.body) into database
       
       
-      /*
-        url ="http://www.localhost:3000" + req.query.title;
+      res.end('Send user to tournament bracket page\n');
+      
+       /*
+        url ="http://www.localhost:3000" + tournid;
         body = "Goodbye cruel localhost";
         res.writeHead(301, {
              'Location': url,
@@ -68,6 +46,46 @@ function handleRequest(req, res) {
 
         res.end(body);
         */
+      
+   
+    //tournController.create(req, res);
+      
+  } else {
+        var query = req.url.split('/')[1];
+        
+        req.query =  query;
+      
+        
+        if(req.query == "" || req.query == "create"){
+            console.log("create bracket " + query );
+            
+            res.end(index);
+        }else if(req.query.indexOf('.') !== -1){
+                 fs.readFile(req.query, function(err, html){ 
+                    if(err){
+                      res.writeHead(404);
+                      res.write("Not Found!");
+                    }
+                    else{
+                      res.writeHead(200);
+                      res.write(html);
+                    }
+                    res.end();
+                  });
+        }else{
+            
+        
+            
+            //find tournament info based on req.query which is tournament id
+                //if tournament id is found it will display info
+                
+                //else it will display 404 error
+            
+            console.log("Find tournament: " + query);
+            res.end(query);
+        }
+      
+      
     //tournController.list(req, res);
   }
 }
