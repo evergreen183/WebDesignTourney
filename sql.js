@@ -9,10 +9,10 @@ let db = new sqlite3.Database('./tourney.db', sqlite3.OPEN_READWRITE, (err) => {
 
 addTournament("ranald");
 addTournament("dammit");
-addPlayer(1, "rob");
-addPlayer(1, "dob");
-addPlayer(1, "gob");
-addPlayer(1, "rob");
+addPlayer(1, "rob", "1;1");
+addPlayer(1, "dob", "1;2");
+addPlayer(1, "gob", "1;3");
+addPlayer(1, "rob", "1;4");
 
 db.close((err) => {
   if (err) {
@@ -31,8 +31,8 @@ function addTournament(tournamentName){
 };
 
 function addPlayer(tID, playerName, playerPosition){
-  let sql = `INSERT INTO Players(name, wins, loses, position) VALUES(` + playerName + `,0,0,` + playerPosition`)`;
-  db.run(sql, playerName, function(err) {
+  let sql = `INSERT INTO Players(name, wins, losses, position) VALUES(?,0,0,?)`;
+  db.run(sql, [playerName, playerPosition], function(err) {
     if (err) {
       return console.log(err.message);
     }
@@ -46,5 +46,48 @@ function addPlayer(tID, playerName, playerPosition){
       }
       console.log(`A row has been inserted with rowid ${this.lastID}`);
     });
+  });
+}
+
+function getTournament(tID){
+  let sql =  `SELECT name FROM Tournament WHERE tID = ?`;
+  db.run(sql, tID, function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+  });
+
+  sql = `SELECT playerID, name, wins, losses, position FROM Players JOIN TournamentPlayers ON Players.playerID = TournamentPlayers.pid where TournamentPlayers.tid = ?`;
+  db.run(sql, tID, function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+  });
+}
+
+function updatePlayerWin(pID){
+  let sql = 'UPDATE Players SET wins = wins+1 WHERE playerID = ?';
+  db.run(sql, pID, function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+  });
+}
+
+function updatePlayerLoss(pID){
+  let sql = 'UPDATE Players SET losses = losses+1 WHERE playerID = ?';
+  db.run(sql, pID, function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
+  });
+}
+
+function updatePlayerPosition(pID, pos){
+  let sql = 'UPDATE Players SET position = ? WHERE playerID = ?';
+  db.run(sql, [pos, pID], function(err) {
+    if (err) {
+      return console.log(err.message);
+    }
   });
 }
