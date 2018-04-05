@@ -60,6 +60,7 @@ function handleRequest(req, res) {
             console.log("create bracket " + query );
             
             res.end(index);
+            
         }else if(req.query.indexOf('.') !== -1){
                  fs.readFile(req.query, function(err, html){ 
                     if(err){
