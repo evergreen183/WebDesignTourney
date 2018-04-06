@@ -10,24 +10,7 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,500" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:700" rel="stylesheet">
     <script>
-        // toggle between hiding and showing the dropdown content
-        function dropDownCol() {
-            document.getElementById("col-dropdown").classList.toggle("show");
-        }
 
-        // Close the dropdown if the user clicks outside of it
-        window.onclick = function(event) {
-          if (!event.target.matches('.drop-button')) {
-
-            var dropdowns = document.getElementsByClassName("dropdown-content");
-            for (var i = 0; i < dropdowns.length; i++) {
-              var openDropdown = dropdowns[i];
-              if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-              }
-            }
-          }
-        }
 
         function addTwo(col, numSpaceBetween, numId, numCol){
             var cell = document.createElement('div');
@@ -203,10 +186,22 @@
                 createEvenBracketSingle(numPlayers, numSpaceTop, numSpaceBetween, loop, numCol+1);
             }
             else{
-                console.log(numPlayers);
                 createEvenBracketSingle(numPlayers, numSpaceTop, numSpaceBetween, 0, numCol);
             }
+        }
 
+        function processString(str){
+
+        }
+
+        function newClick(){
+            location.reload();
+        }
+
+        function createClick(){
+            //processString(document.getElementById('info-box').value);
+            var temp = document.getElementById('info-box').value;
+            createBracketSingle(parseInt(temp));
         }
     </script>
 </head>
@@ -215,8 +210,8 @@
         <div id='header'>
             <h1>Tournament Bracket Maker</h1>
             <textarea id='info-box'></textarea>
-            <div id="create-button" onclick="createBracketSingle(32)">Create Bracket</div>
-            <div id="new-button" onclick="">New Bracket</div>
+            <div id="create-button" onclick="createClick()">Create Bracket</div>
+            <div id="new-button" onclick="newClick()">New Bracket</div>
         </div>
     </div>
 </body>
