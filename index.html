@@ -42,7 +42,7 @@
             cell.className = 'cell-info-top';
             cell.id = numCol + ":" + numId;
             numId += 1;
-            cell.appendChild(document.createTextNode("Name"));
+            cell.appendChild(document.createTextNode(""));
             col.appendChild(cell)
 
             for (var i = 0; i < numSpaceBetween; i++) {
@@ -56,15 +56,9 @@
             cell.className = 'cell-info-bottom';
             cell.id = numCol + ":" + numId;
             numId += 1;
-            cell.appendChild(document.createTextNode("Name"));
+            if(num == 1) cell.appendChild(document.createTextNode("Name"));
+            else cell.appendChild(document.createTextNode(""));
             col.appendChild(cell);
-
-            for (var i = 0; i < numSpaceBetween; i++) {
-                var cell = document.createElement('div');
-                cell.className = 'cell-spacer';
-                cell.appendChild(document.createTextNode(""));
-                col.appendChild(cell);
-            }
 
             return numId;
         }
@@ -92,28 +86,13 @@
                 cell.className = 'cell-info-top';
                 cell.id = numCol + ":" + numId;
                 numId += 1;
-                cell.appendChild(document.createTextNode("Name"));
+                cell.appendChild(document.createTextNode(""));
                 col.appendChild(cell)
             }
 
-            //if it needs to skip 1 then 2s
-            if(skipTop % 2 != 0){
-                numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 1);
-                var temp = skipTop-1;
-                for(var i = 0 ; i < temp; i += 2){
-                    numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 2);
-                }
-            }
-            //if it just needs to skip sets of 2
-            else{
-                for(var i = 0 ; i < skipTop; i += 2){
-                    numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 2);
-                }
-            }
-
-            //double bracket
-            var temp = Math.floor(numPlayers/2);
-            for (var i = 0; i < temp; i++) {
+            //if it needs to skip 2s
+            var temp = skipTop - 1;
+            for(var i = 0 ; i < temp; i += 2){
                 if(i != 0){
                   for (var j = 0; j < numSpaceBetween; j++) {
                       var cell = document.createElement('div');
@@ -122,7 +101,34 @@
                       col.appendChild(cell);
                   }
                 }
-                numId = addTwo(col, numSpaceBetween, numId, numCol);
+                numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 2);
+            }
+            //if it needs to skip 1
+            if(skipTop % 2 != 0){
+                if(skipTop > 1){
+                  for (var j = 0; j < numSpaceBetween; j++) {
+                      var cell = document.createElement('div');
+                      cell.className = 'cell-spacer';
+                      cell.appendChild(document.createTextNode(""));
+                      col.appendChild(cell);
+                  }
+                }
+                numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 1);
+            }
+
+            //double bracket
+            var temp = Math.floor(numPlayers/2);
+            for (var i = 0; i < temp; i++) {
+                if(i != 0 || skipTop != 0){
+                  for (var j = 0; j < numSpaceBetween; j++) {
+                      var cell = document.createElement('div');
+                      cell.className = 'cell-spacer';
+                      cell.appendChild(document.createTextNode(""));
+                      col.appendChild(cell);
+                  }
+                }
+                if (skipTop == 0 && numCol != 1) numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 2);
+                else numId = addTwo(col, numSpaceBetween, numId, numCol);
             }
 
             //wrap-up
