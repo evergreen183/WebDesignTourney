@@ -1,5 +1,6 @@
 const sqlite3 = require('sqlite3').verbose();
 
+//Open DB connection
 let db = new sqlite3.Database('./tourney.db', sqlite3.OPEN_READWRITE, (err) => {
   if (err) {
     console.error(err.message);
@@ -7,13 +8,18 @@ let db = new sqlite3.Database('./tourney.db', sqlite3.OPEN_READWRITE, (err) => {
   console.log('Connected to the tourney database.');
 });
 
+var Tournament = null;
+// Testing functions
 addTournament("ranald");
 addTournament("dammit");
 addPlayer(1, "rob", "1;1");
 addPlayer(1, "dob", "1;2");
 addPlayer(1, "gob", "1;3");
 addPlayer(1, "rob", "1;4");
+getTournament(1);
+console.log(Tournament);
 
+//Close DB connection
 db.close((err) => {
   if (err) {
     return console.error(err.message);
@@ -26,7 +32,6 @@ function addTournament(tournamentName){
     if (err) {
       return console.log(err.message);
     }
-    console.log(`A row has been inserted with rowid ${this.lastID}`);
   });
 };
 
@@ -36,7 +41,6 @@ function addPlayer(tID, playerName, playerPosition){
     if (err) {
       return console.log(err.message);
     }
-    console.log(`A row has been inserted with rowid ${this.lastID}`);
     var pID = this.lastID;
 
     sql = `INSERT INTO TournamentPlayers(tid, pid) VALUES(` + tID + `, ?)`;
@@ -44,7 +48,6 @@ function addPlayer(tID, playerName, playerPosition){
       if (err) {
         return console.log(err.message);
       }
-      console.log(`A row has been inserted with rowid ${this.lastID}`);
     });
   });
 }
@@ -55,6 +58,7 @@ function getTournament(tID){
     if (err) {
       return console.log(err.message);
     }
+    Tournament = {"id" : tID, "players":[]};
   });
 
   sql = `SELECT playerID, name, wins, losses, position FROM Players JOIN TournamentPlayers ON Players.playerID = TournamentPlayers.pid where TournamentPlayers.tid = ?`;
@@ -62,6 +66,8 @@ function getTournament(tID){
     if (err) {
       return console.log(err.message);
     }
+    Tournament.players += {"id" : `${playerId}`, "name" : `${name}`, "wins" : `${wins}`, "losses" : `${losses}`, "position": `${position}`};
+    //Create Player objects. JSON?
   });
 }
 
