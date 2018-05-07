@@ -4,20 +4,5 @@ DROP TABLE IF EXISTS TournamentPlayers;
 
 CREATE TABLE Tournament(
  tournID INTEGER PRIMARY KEY AUTOINCREMENT,
- name varchar(255) NOT NULL
-);
-
-CREATE TABLE Players(
- playerID INTEGER PRIMARY KEY AUTOINCREMENT,
- name VARCHAR(255) NOT NULL,
- wins INTEGER,
- losses INTEGER,
- position VARCHAR(255)
-);
-
-CREATE TABLE TournamentPlayers(
- tid INTEGER,
- pid INTEGER,
- FOREIGN KEY(tid) REFERENCES Tournament(tournID),
- FOREIGN KEY(pid) REFERENCES Players(playerID)
+ data text
 );
