@@ -227,6 +227,25 @@
             }
             //removing the last player if a comma was left in the text box after input
             if(array[array.length-1] == '') array.length -=1;
+            //removing same names and blank spacer
+            for(var i = 0; i < array.length; i++){
+              if(array[i] == ""){
+                array[i] = array.length-1;
+                array.length--;
+              }
+              else{
+                for(var j = i+1; j<array.length;j++){
+                  if(array[i] == array[j]){
+                    while(array[i] == array[array.length-1] && i != array.length-1){
+                      array.length--;
+                    }
+                    if(i != array.length-1){
+                      array[j] = array[array.length-1];
+                    }
+                  }
+                }
+              }
+            }
 
             //randomizing the players
             for(var i = 0; i< array.length; i+=1){
