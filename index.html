@@ -12,7 +12,6 @@
     <script>
 
         var table = {};
-        var players = {};
 
         function playerWin(id){
           //player and cell clicked
@@ -168,6 +167,7 @@
             document.getElementById('info-box').style.display = 'none';
             document.getElementById('create-button').style.display = 'none';
             document.getElementById('new-button').style.display = 'block';
+            document.getElementById('load-button').style.display = 'none';
             wrap.style.display = 'block';
             var col = document.createElement('div');
             col.className = "col";
@@ -217,6 +217,12 @@
             location.reload();
         }
 
+        function loadClick(){
+            var temp = document.getElementById('info-box').value;
+
+            createBracketSingle(array.length, array);
+        }
+
         function createClick(){
             //getting the information from the input
             var temp = document.getElementById('info-box').value;
@@ -230,8 +236,13 @@
             //removing same names and blank spacer
             for(var i = 0; i < array.length; i++){
               if(array[i] == ""){
-                array[i] = array.length-1;
-                array.length--;
+                while(array[i] == array[array.length-1] && i != array.length-1){
+                  array.length--;
+                }
+                if(i != array.length-1){
+                  array[i] = array[array.length-1];
+                  array.length--;
+                }
               }
               else{
                 for(var j = i+1; j<array.length;j++){
@@ -241,10 +252,17 @@
                     }
                     if(i != array.length-1){
                       array[j] = array[array.length-1];
+                      array.length--;
                     }
                   }
                 }
               }
+            }
+
+            //reloads page if one or less names were entered.
+            if(array.length <= 1) {
+              location.reload();
+              return;
             }
 
             //randomizing the players
@@ -264,7 +282,6 @@
               size++;
             }
             table = new Array(size);
-            console.log(table);
             //if it is an even table
             if(value == amount){
               table[0] = new Array(amount);
@@ -300,7 +317,6 @@
               }
               if(current >= array.length) break;
             }
-            console.log(table);
 
             createBracketSingle(array.length, array);
         }
@@ -310,9 +326,10 @@
     <div id='bracket-wrap'>
         <div id='header'>
             <h1>Tournament Bracket Maker</h1>
-            <textarea id='info-box'></textarea>
+            <textarea id='info-box' placeholder="To create a new tournament enter player names separated by a comma, example 'Fred, Steve, Emma, Fred2' and hit Create Tournament.&#10;&#10;To load a previous tournament place the Tournament Id here and click Load Bracket."></textarea>
             <div id="create-button" onclick="createClick()">Create Bracket</div>
             <div id="new-button" onclick="newClick()">New Bracket</div>
+            <div id="load-button" onclick="loadClick()">Load Bracket</div>
         </div>
     </div>
 </body>
