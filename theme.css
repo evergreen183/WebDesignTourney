@@ -20,7 +20,7 @@ h1{
     width: 100%;
     padding: 10px;
     text-align: center;
-    display: inline-block;
+    display: block;
     font-weight: 500;
 }
 
@@ -30,6 +30,10 @@ h1{
 
 #new-button{
     display: none;
+}
+
+#load-button{
+    margin-top: 10px;
 }
 
 #info-box{
