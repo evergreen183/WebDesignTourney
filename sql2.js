@@ -18,21 +18,11 @@ function openDB(){
   });
 }
 
-var i;
-var tourn = {};
-// TESTING THINGS DONT WORRY ABOUT IT
-/*var Tournament = {"id" : 0, "players":{} };
-console.log(Tournament);*/
-/* Testing functions
-addTournament("ranald");
-addTournament("dammit");
-addPlayer(1, "rob", "1;1");
-addPlayer(1, "dob", "1;2");
-addPlayer(1, "gob", "1;3");
-addPlayer(1, "rob", "1;4");
-getTournament(1);*/
-//openDB().then( () => {addTournament("ranald");} ).then( () => {addTournament("smash");} ).then( () => {addPlayer(1, "rob", "1;1");} ).then( () => {addPlayer(1, "dob", "1;2");} ).then( () => {addPlayer(1, "gob", "1;3");} ).then( () => {var t = getTournament(1); console.log(t); } ).then( () => {closeDB();} );
-openDB().then( () => {i = addTournament(); console.log(i);} ).then( () => {tourn = getTournament(1);} ).then( () => {closeDB();});
+//var i;
+//var tourn = {};
+//openDB().then( () => {i = addTournament(); console.log(i);} ).then( () => {tourn = getTournament(1);} ).then( () => {closeDB();});
+
+// IMPORTANT openDB().then( () => {*****ONE OF THE THREE FUNCTIONS*****;} ).then( () => {closeDB();});
 
 //Close DB connection
 function closeDB(){
@@ -47,6 +37,7 @@ function closeDB(){
   });
 }
 
+//RETURNS ID
 function addTournament() {
   return new Promise (function (fullfilled, reject){
     let sql = `INSERT INTO Tournament(data) VALUES(?)`;
@@ -61,6 +52,7 @@ function addTournament() {
   });
 }
 
+//RETURNS OBJECT
 function getTournament(tID){
   return new Promise (function (fullfilled, reject){
     let sql =  `SELECT data FROM Tournament WHERE tournID = ?`;
