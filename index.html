@@ -11,13 +11,52 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:700" rel="stylesheet">
     <script>
 
+        var table = {};
+        var players = {};
+
+        function playerWin(id){
+          //player and cell clicked
+          var values = id.split(':');
+          //opponent of the player clicked
+          var other =[values[0],""];
+          if(values[1]%2 == 0){
+            other[1] = parseInt(values[1])+1;
+          }
+          else{
+            other[1] = parseInt(values[1])-1;
+          }
+          //alerts if there is no opponent
+          if(table[other[0]][other[1]] == ""){
+            alert("Needs an Opponent");
+            return;
+          }
+          var col =(parseInt(values[0])+1);
+          var row = Math.floor(values[1]/2);
+          //alerts if there has already been a winner from this round.
+          if(table[col][row] != ""){
+            alert("A Player Has Already Won This Round");
+            return;
+          }
+
+          //places winner into his new position
+          div = document.getElementById(id);
+          table[col][row] = table[values[0]][values[1]];
+          div2 = document.getElementById(col+":"+row);
+          div2.appendChild(document.createTextNode(table[values[0]][values[1]]));
+          div2.style.cursor = "pointer";
+          div2.setAttribute("onclick", "playerWin(\'"+ div2.id +"\')");
+        }
 
         function addTwo(col, numSpaceBetween, numId, numCol){
             var cell = document.createElement('div');
             cell.className = 'cell-info-top';
             cell.id = numCol + ":" + numId;
+            cell.appendChild(document.createTextNode(table[numCol][numId]));
+            if(table[numCol][numId] != ""){
+              cell.style.cursor = "pointer";
+              cell.setAttribute("onclick", "playerWin(\'"+ cell.id +"\')");
+            }
             numId += 1;
-            cell.appendChild(document.createTextNode("Name"));
             col.appendChild(cell)
 
             for (var i = 0; i < numSpaceBetween; i++) {
@@ -30,44 +69,22 @@
             var cell = document.createElement('div');
             cell.className = 'cell-info-bottom';
             cell.id = numCol + ":" + numId;
-            numId += 1;
-            cell.appendChild(document.createTextNode("Name"));
-            col.appendChild(cell);
-
-            return numId;
-        }
-
-        function addTwoSkip(col, numSpaceBetween, numId, numCol, num){
-            var cell = document.createElement('div');
-            cell.className = 'cell-info-top';
-            cell.id = numCol + ":" + numId;
-            numId += 1;
-            cell.appendChild(document.createTextNode(""));
-            col.appendChild(cell)
-
-            for (var i = 0; i < numSpaceBetween; i++) {
-                var cell = document.createElement('div');
-                cell.className = 'cell-info-spacer';
-                cell.appendChild(document.createTextNode(""));
-                col.appendChild(cell);
+            cell.appendChild(document.createTextNode(table[numCol][numId]));
+            if(table[numCol][numId] != ""){
+              cell.style.cursor = "pointer";
+              cell.setAttribute("onclick", "playerWin(\'"+ cell.id +"\')");
             }
-
-            var cell = document.createElement('div');
-            cell.className = 'cell-info-bottom';
-            cell.id = numCol + ":" + numId;
             numId += 1;
-            if(num == 1) cell.appendChild(document.createTextNode("Name"));
-            else cell.appendChild(document.createTextNode(""));
             col.appendChild(cell);
 
             return numId;
         }
 
-        function createEvenBracketSingle(players, top, between, skipTop, numCol){
-            var numPlayers = players;
+        function createEvenBracketSingle(num, top, between, skipTop, numCol){
+            var numPlayers = num;
             var numSpaceTop = top;
             var numSpaceBetween = between;
-            var numId = 1;
+            var numId = 0;
             var wrap = document.getElementById('bracket-wrap');
             var col = document.createElement('div');
             col.className = "col";
@@ -101,7 +118,7 @@
                       col.appendChild(cell);
                   }
                 }
-                numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 2);
+                numId = addTwo(col, numSpaceBetween, numId, numCol, 2);
             }
             //if it needs to skip 1
             if(skipTop % 2 != 0){
@@ -113,7 +130,7 @@
                       col.appendChild(cell);
                   }
                 }
-                numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 1);
+                numId = addTwo(col, numSpaceBetween, numId, numCol, 1);
             }
 
             //double bracket
@@ -127,7 +144,7 @@
                       col.appendChild(cell);
                   }
                 }
-                if (skipTop == 0 && numCol != 1) numId = addTwoSkip(col, numSpaceBetween, numId, numCol, 2);
+                if (skipTop == 0 && numCol != 1) numId = addTwo(col, numSpaceBetween, numId, numCol, 2);
                 else numId = addTwo(col, numSpaceBetween, numId, numCol);
             }
 
@@ -141,12 +158,12 @@
             }
         }
 
-        function createBracketSingle(players) {
-            var numPlayers = players;
+        function createBracketSingle(num, players) {
+            var numPlayers = num;
             var numSpaceTop = 1;
             var numSpaceBetween = 1;
-            var numId = 1;
-            var numCol = 1;
+            var numId = 0;
+            var numCol = 0;
             var wrap = document.getElementById('bracket-wrap');
             document.getElementById('info-box').style.display = 'none';
             document.getElementById('create-button').style.display = 'none';
@@ -162,7 +179,7 @@
             }
             temp = temp/2;
 
-            //check if pre-even-bracket is neeed and make it or continue to even bracket
+            //check if pre-even-bracket is needed and make it or continue to even bracket
             if (temp != numPlayers){
                 var loop = numPlayers - temp;
                 //spacer top
@@ -196,22 +213,77 @@
             }
         }
 
-        function processString(str){
-
-        }
-
         function newClick(){
             location.reload();
         }
 
         function createClick(){
-            //processString(document.getElementById('info-box').value);
+            //getting the information from the input
             var temp = document.getElementById('info-box').value;
             var array = temp.split(',');
+            //making the input javascript safe
             for(var i = 0; i < array.length; i++){
-                array[i] = array[i].trim().replace(/&nbsp;/g, '');
-                console.log(array[i]);
+                array[i] = array[i].trim().replace(/&nbsp;/g, '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
             }
+            //removing the last player if a comma was left in the text box after input
+            if(array[array.length-1] == '') array.length -=1;
+
+            //randomizing the players
+            for(var i = 0; i< array.length; i+=1){
+                var j = Math.floor(Math.random() * (array.length));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+
+            //creating the table array
+            var value = 2;
+            var size = 2;
+            var amount = array.length;
+            while(value < amount){
+              value = value * 2;
+              size++;
+            }
+            table = new Array(size);
+            console.log(table);
+            //if it is an even table
+            if(value == amount){
+              table[0] = new Array(amount);
+              amount = amount/2;
+              for(var i = 1; i < table.length; i++){
+                table[i] = new Array(amount);
+                amount = amount /2;
+              }
+            }
+            //if the table requires some players to play an extra round
+            else{
+              table[0] = new Array(amount - (value - amount));
+              table[1] = new Array(value - amount + (table[0].length/2));
+              amount = value/4;
+              for(var i = 2; i < table.length; i++){
+                table[i] = new Array(amount);
+                amount = amount/2;
+              }
+            }
+
+            //filling the array with blank strings
+            for(var i = 0; i < table.length; i++){
+              table[i].fill("");
+            }
+            //placing the players into the table array
+            var current = 0;
+            for(var i = 0; i < table.length; i++){
+              for(var j = table[i].length -1; j >= 0; j--){
+                console.log(j + ":" + current);
+                table[i][j] = array[current];
+                current++;
+                if(current >= array.length) break;
+              }
+              if(current >= array.length) break;
+            }
+            console.log(table);
+
+            createBracketSingle(array.length, array);
         }
     </script>
 </head>
