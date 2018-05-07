@@ -18,8 +18,8 @@ function openDB(){
   });
 }
 
-var i;
-var tourn = {};
+//var i;
+//var tourn = {};
 // TESTING THINGS DONT WORRY ABOUT IT
 /*var Tournament = {"id" : 0, "players":{} };
 console.log(Tournament);*/
@@ -32,7 +32,7 @@ addPlayer(1, "gob", "1;3");
 addPlayer(1, "rob", "1;4");
 getTournament(1);*/
 //openDB().then( () => {addTournament("ranald");} ).then( () => {addTournament("smash");} ).then( () => {addPlayer(1, "rob", "1;1");} ).then( () => {addPlayer(1, "dob", "1;2");} ).then( () => {addPlayer(1, "gob", "1;3");} ).then( () => {var t = getTournament(1); console.log(t); } ).then( () => {closeDB();} );
-openDB().then( () => {i = addTournament(); console.log(i);} ).then( () => {tourn = getTournament(1);} ).then( () => {closeDB();});
+//openDB().then( () => {i = addTournament(); console.log(i);} ).then( () => {tourn = getTournament(1);} ).then( () => {closeDB();});
 
 //Close DB connection
 function closeDB(){
